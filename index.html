@@ -78,32 +78,42 @@ ul {
 </div>
 
   </div>  <script>
-    let total = 0;
+  const menu = {
+    "아메리카노": 3000,
+    "카페라떼": 4500,
+    "바닐라라떼": 5000,
+    "아이스티": 3500
+  };
 
-    function addItem() {
-      const item = document.getElementById('item').value;
-      const price = Number(document.getElementById('price').value);
+  let total = 0;
 
-      if (!item || !price) {
-        alert('상품명과 금액을 입력하세요');
-        return;
-      }
+  function addItem() {
+    const item = document.getElementById('item').value.trim();
 
-      const li = document.createElement('li');
-      li.textContent = `${item} - ${price.toLocaleString()}원`;
-      document.getElementById('list').appendChild(li);
-
-      total += price;
-      document.getElementById('total').textContent = total.toLocaleString();
-
-      document.getElementById('item').value = '';
-      document.getElementById('price').value = '';
+    if (!menu[item]) {
+      alert('등록되지 않은 메뉴입니다');
+      return;
     }
 
-    function resetList() {
-      document.getElementById('list').innerHTML = '';
-      total = 0;
-      document.getElementById('total').textContent = '0';
-    }
+    const price = menu[item];
+
+    const li = document.createElement('li');
+    li.textContent = `${item} - ${price.toLocaleString()}원`;
+
+    document.getElementById('list').appendChild(li);
+
+    total += price;
+
+    document.getElementById('total').textContent =
+      total.toLocaleString();
+
+    document.getElementById('item').value = '';
+  }
+
+  function resetList() {
+    document.getElementById('list').innerHTML = '';
+    total = 0;
+    document.getElementById('total').textContent = '0';
+  }
   </script></body>
 </html>
