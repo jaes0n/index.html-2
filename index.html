@@ -245,6 +245,51 @@ function resetList(){
 
 }
 
+    const input = document.getElementById("item");
+
+input.addEventListener("input", showSuggestions);
+
+function showSuggestions(){
+
+    const value = input.value.trim();
+
+    const suggestions =
+    document.getElementById("suggestions");
+
+    suggestions.innerHTML = "";
+
+    if(value === "") return;
+
+    const filtered =
+    Object.keys(menu).filter(name =>
+        name.includes(value)
+    );
+
+    filtered.forEach(name => {
+
+        const div =
+        document.createElement("div");
+
+        div.className = "suggestion-item";
+
+        div.textContent =
+        name + " - " +
+        menu[name].toLocaleString() + "원";
+
+        div.onclick = () => {
+
+            input.value = name;
+
+            suggestions.innerHTML = "";
+
+        };
+
+        suggestions.appendChild(div);
+
+    });
+
+}
+
 </script>
 
 </body>
