@@ -1,203 +1,216 @@
-<!DOCTYPE html><html lang="ko">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>간단 POS</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }.pos {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 320px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>간단 POS</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+.pos{
+    background:white;
+    width:350px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
+h1{
+    text-align:center;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 5px;
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+    font-size:16px;
 }
 
-button:hover {
-  background: #444;
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:black;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
 }
 
-.total {
-  margin-top: 20px;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
+button:hover{
+    background:#333;
 }
 
-ul {
-  padding-left: 20px;
+ul{
+    margin-top:20px;
+    padding-left:20px;
 }
 
-  </style>
+.total{
+    margin-top:20px;
+    font-size:24px;
+    font-weight:bold;
+    text-align:center;
+}
+</style>
 </head>
 
-  <body>
-  <div class="pos">
+<body>
+
+<div class="pos">
     <h1>간단 POS</h1>
 
-    <input type="text" id="item" placeholder="메뉴 입력" />
+    <input type="text" id="item" placeholder="메뉴 입력">
 
     <button onclick="addItem()">추가</button>
+
     <button onclick="resetList()">초기화</button>
 
     <ul id="list"></ul>
 
     <div class="total">
-      총 금액: <span id="total">0</span>원
+        총 금액: <span id="total">0</span>원
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
+
 const menu = {
-  "아메리카노": 1900,
-  "카페라떼": 3900,
-  "1L 카페라떼": 4900,
-  "바닐라라떼": 4400,
-  "저당 바닐라라떼": 4900,
-  "아이스티": 3400,
-  "1L 아이스티": 4400,
-  "백억 리치 라떼": 4000,
-  "초코 리치 라떼": 4900,
-  "말차 리치 라떼": 4900,
-  "스위트 꿀 바닐라 헤이즐넛 아메리카노": 2400,
-  "코코넛 밀크 라떼": 4900,
-  "꿀 카페라떼": 4400,
-  "카페 모카": 4400,
-  "카라멜 마끼아또": 4400,
-  "연유 라떼": 4400,
-  "백억 커피": 4400,
-  "1L 백억커피": 5400,
-  "콜드브루": 4400,
-  "콜드브루 라떼": 4900,
-  "리치 콜드브루 라떼": 5400,
-  "오트 콜드브루 라떼": 5400,
-  "바닐라 콜드브루 라떼": 5400,
-  "연유 콜드브루 라떼": 4400,
-  "초코 라떼": 4400,
-  "1L 초코 라떼": 5900,
-  "민트 초코 라떼": 4400,
-  "미숫가레 라떼": 4400,
-  "고구마 라떼": 4400,
-  "토피넛 라떼": 4400,
-  "말차 라떼": 4400,
-  "보성 홍차 밀크티": 4900,
-  "딥 초코 바나나 라떼": 4400,
-  "메론 라떼": 4400,
-  "흑당 버블티": 5400,
-  "꿀 말차 버블티": 5400,
-  "딸기 홍차 버블티": 5400,
-  "찐 딸기 우유": 4400,
-  "1L 찐 딸기 우유": 5900,
-  "찐 밍고 우유": 4400,
-  "찐 블루베리 우유": 4400,
-  "찐 바나나 딸기 우유": 4900,
-  "초코스무디": 4900,
-  "민트 초코 스무디": 4900,
-  "플레인 요거트 스무디": 4400,
-  "딸기 요거트 스무디": 4900,
-  "망고 요거트 스무디": 4900,
-  "블루베리 요거트 스무디": 4900,
-  "메론 스무디": 4900,
-  "배 스무디": 4900,
-  "자두 스무디": 4900,
-  "딸기 스무디": 4900,
-  "망고 스무디": 4900,
-  "딸기 망고 스무디": 4900,
-  "백억커피 스무디": 4900,
-  "말차 스무디": 4900,
-  "미숫가루 스무디": 4900,
-  "백억 슈퍼 드링크": 4900,
-  "레몬 에이드": 4400,
-  "블루레몬 에이드": 4400,
-  "자몽 에이드": 4400,
-  "자두 에이드": 4400,
-  "청포도 에이드": 4400,
-  "더블베리 에이드": 4400,
-  "체리 에이드": 4400,
-  "체리 콕": 4400,
-  "아샷추": 3900,
-  "1L 아샷추": 5400,
-  "아망추": 5400,
-  "1L 아망추": 6400,
-  "레몬차": 3900,
-  "자몽차": 3900,
-  "유자차": 3900,
-  "오미자차": 3900,
-  "매실차": 3900
+
+    "아메리카노": 1900,
+    "카페라떼": 3900,
+    "1L 카페라떼": 4900,
+    "바닐라라떼": 4400,
+    "저당 바닐라라떼": 4900,
+    "아이스티": 3400,
+    "1L 아이스티": 4400,
+    "백억 리치 라떼": 4000,
+    "초코 리치 라떼": 4900,
+    "말차 리치 라떼": 4900,
+    "스위트 꿀 바닐라 헤이즐넛 아메리카노": 2400,
+    "코코넛 밀크 라떼": 4900,
+    "꿀 카페라떼": 4400,
+    "카페 모카": 4400,
+    "카라멜 마끼아또": 4400,
+    "연유 라떼": 4400,
+    "백억 커피": 4400,
+    "1L 백억커피": 5400,
+    "콜드브루": 4400,
+    "콜드브루 라떼": 4900,
+    "리치 콜드브루 라떼": 5400,
+    "오트 콜드브루 라떼": 5400,
+    "바닐라 콜드브루 라떼": 5400,
+    "연유 콜드브루 라떼": 4400,
+    "초코 라떼": 4400,
+    "1L 초코 라떼": 5900,
+    "민트 초코 라떼": 4400,
+    "미숫가레 라떼": 4400,
+    "고구마 라떼": 4400,
+    "토피넛 라떼": 4400,
+    "말차 라떼": 4400,
+    "보성 홍차 밀크티": 4900,
+    "딥 초코 바나나 라떼": 4400,
+    "메론 라떼": 4400,
+    "흑당 버블티": 5400,
+    "꿀 말차 버블티": 5400,
+    "딸기 홍차 버블티": 5400,
+    "찐 딸기 우유": 4400,
+    "1L 찐 딸기 우유": 5900,
+    "찐 밍고 우유": 4400,
+    "찐 블루베리 우유": 4400,
+    "찐 바나나 딸기 우유": 4900,
+    "초코스무디": 4900,
+    "민트 초코 스무디": 4900,
+    "플레인 요거트 스무디": 4400,
+    "딸기 요거트 스무디": 4900,
+    "망고 요거트 스무디": 4900,
+    "블루베리 요거트 스무디": 4900,
+    "메론 스무디": 4900,
+    "배 스무디": 4900,
+    "자두 스무디": 4900,
+    "딸기 스무디": 4900,
+    "망고 스무디": 4900,
+    "딸기 망고 스무디": 4900,
+    "백억커피 스무디": 4900,
+    "말차 스무디": 4900,
+    "미숫가루 스무디": 4900,
+    "백억 슈퍼 드링크": 4900,
+    "레몬 에이드": 4400,
+    "블루레몬 에이드": 4400,
+    "자몽 에이드": 4400,
+    "자두 에이드": 4400,
+    "청포도 에이드": 4400,
+    "더블베리 에이드": 4400,
+    "체리 에이드": 4400,
+    "체리 콕": 4400,
+    "아샷추": 3900,
+    "1L 아샷추": 5400,
+    "아망추": 5400,
+    "1L 아망추": 6400,
+    "레몬차": 3900,
+    "자몽차": 3900,
+    "유자차": 3900,
+    "오미자차": 3900,
+    "매실차": 3900
+
 };
-    };
 
-    let total = 0;
+let total = 0;
 
-    function addItem() {
-      const item =
-        document.getElementById('item').value.trim();
+function addItem(){
 
-      if (!menu[item]) {
-        alert('등록되지 않은 메뉴입니다');
+    const item =
+    document.getElementById("item").value.trim();
+
+    if(menu[item] === undefined){
+        alert("등록되지 않은 메뉴입니다");
         return;
-      }
-
-      const price = menu[item];
-
-      const li = document.createElement('li');
-
-      li.textContent =
-        `${item} - ${price.toLocaleString()}원`;
-
-      document.getElementById('list')
-        .appendChild(li);
-
-      total += price;
-
-      document.getElementById('total')
-        .textContent = total.toLocaleString();
-
-      document.getElementById('item').value = '';
     }
 
-    function resetList() {
-      document.getElementById('list').innerHTML = '';
+    const price = menu[item];
 
-      total = 0;
+    const li = document.createElement("li");
 
-      document.getElementById('total')
-        .textContent = '0';
-    }
-  </script>
-  </body>
+    li.textContent =
+    item + " - " + price.toLocaleString() + "원";
+
+    document.getElementById("list")
+    .appendChild(li);
+
+    total += price;
+
+    document.getElementById("total")
+    .textContent = total.toLocaleString();
+
+    document.getElementById("item").value = "";
+
+}
+
+function resetList(){
+
+    document.getElementById("list").innerHTML = "";
+
+    total = 0;
+
+    document.getElementById("total")
+    .textContent = "0";
+
+}
+
+</script>
+
+</body>
 </html>
